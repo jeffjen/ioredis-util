@@ -1,0 +1,22 @@
+{
+  "name": "ioredis-util",
+  "version": "0.0.1",
+  "description": "utility for ioredis connection",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffjen/ioredis-util.git"
+  },
+  "author": "Jeffrey\tJen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jeffjen/ioredis-util/issues"
+  },
+  "homepage": "https://github.com/jeffjen/ioredis-util#readme",
+  "dependencies": {
+    "ioredis": "git+https://github.com/jeffjen/ioredis.git"
+  }
+}
