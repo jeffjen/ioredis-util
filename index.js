@@ -52,12 +52,13 @@ function parseRedisNetloc(redis_addr) {
             options: {}
         };
     } else if (redis_addr.indexOf(sentinel) === 0) {
-        var _addr = redis_addr.substring(sentinel.length);
+        var _addr = redis_addr.substring(sentinel.length),
+            pinfo = path.parse(_addr);
         return {
             type: "sentinel",
             options: {
-                sentinels: parse(path.dirname(_addr)),
-                name: path.basename(_addr),
+                sentinels: parse(pinfo.dir),
+                name: pinfo.base,
                 retryStrategy: retryStrategy,
                 reconnectOnError: reconnectOnError
             }
@@ -101,8 +102,6 @@ function NewRedis(redis_addr, tls) {
     }
     if (net.type === "sentinel") {
         var r = new Redis(net.options);
-        console.log("not fully supported - sentinel:", net);
-        process.exit(2);
         return r;
     }
 }
