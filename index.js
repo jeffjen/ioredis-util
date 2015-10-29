@@ -2,6 +2,7 @@
 
 var math = require("mathjs"),
     path = require("path"),
+    Promise = require("promise"),
     url = require("url");
 
 var Redis = require("ioredis");
@@ -85,11 +86,11 @@ function parseRedisNetloc(redis_addr) {
  * NewRedis
  * returns a redis connection object
  */
-function NewRedis(redis_addr, tls) {
-    if (redis_addr === undefined) {
-        redis_addr = process.argv[3];
+function NewRedis(addr, tls) {
+    if (addr === undefined) {
+        addr = process.argv[3];
     }
-    var net = parseRedisNetloc(redis_addr);
+    var net = parseRedisNetloc(addr);
     net.options.tls = tls;
     if (net.type === "single") {
         return new Redis(net.options);
@@ -106,6 +107,20 @@ function NewRedis(redis_addr, tls) {
     }
 }
 
+function ConnectHelper(addr, tls) {
+    function waitForReady(ok, grr) {
+        var r = NewRedis(addr, tls);
+        r.once("ready", function() {
+            ok(r);
+        });
+        r.once("error", function(err) {
+            grr(err);
+        });
+    }
+    return new Promise(waitForReady);
+}
+
 module.exports = {
     NewStore: NewRedis,
+    ConnectHelper: ConnectHelper
 }
