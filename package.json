@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/jeffjen/ioredis-util#readme",
   "dependencies": {
-    "ioredis": "^1.13.0",
+    "ioredis": "git+https://github.com/jeffjen/ioredis.git",
     "mathjs": "^2.4.0",
     "promise": "^7.0.4"
   }
