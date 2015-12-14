@@ -3,13 +3,16 @@
 var math = require("mathjs"),
     path = require("path"),
     Promise = require("promise"),
-    url = require("url");
+    url = require("url"),
+    util = require("util");
+
+var debug = util.debuglog('ioredis-util');
 
 var Redis = require("ioredis");
 
 function retryStrategy(attemts) {
     var delay = Math.min(attemts * 2, 2000);
-    console.log("redis disconnected; retry after", delay);
+    debug("retryStrategy:", delay);
     return delay;
 }
 
@@ -19,7 +22,7 @@ function reconnectOnError(err) {
         // Only reconnect when the error starts with "READONLY"
         return true;
     } else {
-        console.log("redis error; msg:", err);
+        debug("reconnectOnError:", err);
     }
 }
 
@@ -77,7 +80,7 @@ function parseRedisNetloc(redis_addr) {
             }
         };
     } else {
-        console.error("bad redis netloc: " + redis_addr);
+        debug("parseRedisNetloc: bad:", redis_addr);
         process.exit(1);
     }
 }
@@ -97,7 +100,7 @@ function NewRedis(addr, tls) {
     }
     if (net.type === "cluster") {
         var r = new Redis.Cluster(net.startUpNodes, net.options);
-        console.log("not fully supported - cluster:", net);
+        debug("NewRedis: cluster: not supported", net);
         process.exit(2);
         return r;
     }
