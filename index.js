@@ -6,7 +6,10 @@ var math = require("mathjs"),
     url = require("url"),
     util = require("util");
 
-var debug = util.debuglog('ioredis-util');
+var debug = console.log;
+if (util.debuglog !== undefined) {
+    debug = util.debuglog('ioredis-util');
+}
 
 var Redis = require("ioredis");
 
